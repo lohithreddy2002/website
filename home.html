@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/drawingboard.js/dist/drawingboard.min.css" />
+    <style>
+        #board{
+            width: 200px;
+            height: 200px;
+            border: 4px black;
+        }
+    </style>
+</head>
+<body>
+    <h1>board</h1>
+    <div id="board"></div>
+    <button  onclick="ResetBG()">Clear</button>
+
+    <button
+      type="submit"
+      class="btn btn-success"
+      onclick="GetImageURL()"
+    >submit</button>
+    <h2 id='predict'>loading...</h2>
+    <script src="static/drawingboard.js/dist/drawingboard.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        var simpleBoard = new DrawingBoard.Board("board", {
+            controls: false,
+            background: "#000",
+            color: "#fff",
+            size: 20,
+            webStorage: false,
+          });
+          const GetImageURL = () => {
+            url = simpleBoard.getImg();
+            console.log("Image Request Sent ...");
+            $.ajax({
+              type: "POST",
+              url: "/upload",
+              data: {
+                imageBase64: url,
+              },
+            }).done(function (e) {
+              updateTable(e);
+              ResetBG();
+              console.log(e);
+            });
+            const updateTable = (obj) => {
+                console.log("Update Table called");
+
+                const predictParent = document.getElementById("predict");
+              
+                prediction = obj.prediction;
+                predictParent.innerHTML = prediction;
+              };
+
+          };
+
+          const ResetBG = () => {
+            console.log("Reset BG called");
+            simpleBoard.resetBackground();
+          };
+    </script>
+    
+</body>
+</html>
