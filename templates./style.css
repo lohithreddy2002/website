@@ -1,0 +1,16 @@
+    body {
+      background-color: burlywood;
+    }
+
+    body,html{
+     overflow-x: hidden;
+    }
+
+    #board{
+     background-color: black;
+     width: 200px;
+     height: 200px;
+     margin: 0 auto;
+     /* border-spacing: 4px ;
+     border-color: white; */
+    }
