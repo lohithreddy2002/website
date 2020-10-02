@@ -1,70 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="static/drawingboard.js/dist/drawingboard.min.css" />
-    <style>
-        #board{
-            width: 200px;
-            height: 200px;
-            border: 4px black;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predictor</title>
+  <link rel="stylesheet" href="static/drawingboard.js/dist/drawingboard.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="./templates/style.css">
+
+
+
 </head>
+
 <body>
-    <h1>board</h1>
-    <div id="board"></div>
-    <button  onclick="ResetBG()">Clear</button>
+  <section class="all">
+    <h1 class="text-center" style="color: darkblue;">Board</h1>
+    <hr width="100px" style="  border-width: 5px; color: black;  border-style: inset;  display: block;">
+    <!-- <div id="board"></div> -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4" style="text-align: center; font-size: 18px;">This is a model which predicts the digit
+          written on the drawing board.</div>
+        <div class="mb-4" id="board"></div>
+        <div class="col-lg-4 mb-4" style="text-align: center; font-size: 18px;">Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Laboriosam debitis explicabo facere officia laudantium quas ullam deserunt nemo dolorum.
+          Quisquam cupiditate laudantium nostrum error facilis?</div>
+      </div>
+    </div>
+    <div class="row">
+      <div style="margin: 0 auto;">
+        <button onclick="ResetBG()" class="btn btn-danger">Clear</button>
+        <!-- </div>
+    <div class="col-6"> -->
+        <button type="submit" class="btn btn-success" onclick="GetImageURL()">Submit</button>
+      </div>
+    </div>
 
-    <button
-      type="submit"
-      class="btn btn-success"
-      onclick="GetImageURL()"
-    >submit</button>
-    <h2 id='predict'>loading...</h2>
-    <script src="static/drawingboard.js/dist/drawingboard.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <h2 id='predict' class="mt-4 text-center">Loading...</h2>
+  </section>
+  <script src="static/drawingboard.js/dist/drawingboard.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script>
-        var simpleBoard = new DrawingBoard.Board("board", {
-            controls: false,
-            background: "#000",
-            color: "#fff",
-            size: 20,
-            webStorage: false,
-          });
-          const GetImageURL = () => {
-            url = simpleBoard.getImg();
-            console.log("Image Request Sent ...");
-            $.ajax({
-              type: "POST",
-              url: "/upload",
-              data: {
-                imageBase64: url,
-              },
-            }).done(function (e) {
-              updateTable(e);
-              ResetBG();
-              console.log(e);
-            });
-            const updateTable = (obj) => {
-                console.log("Update Table called");
+  <script>
+    var simpleBoard = new DrawingBoard.Board("board", {
+      controls: false,
+      background: "#000",
+      color: "#fff",
+      size: 20,
+      webStorage: false,
+    });
+    const GetImageURL = () => {
+      url = simpleBoard.getImg();
+      console.log("Image Request Sent ...");
+      $.ajax({
+        type: "POST",
+        url: "/upload",
+        data: {
+          imageBase64: url,
+        },
+      }).done(function (e) {
+        updateTable(e);
+        ResetBG();
+        console.log(e);
+      });
+      const updateTable = (obj) => {
+        console.log("Update Table called");
 
-                const predictParent = document.getElementById("predict");
-              
-                prediction = obj.prediction;
-                predictParent.innerHTML = prediction;
-              };
+        const predictParent = document.getElementById("predict");
 
-          };
+        prediction = obj.prediction;
+        predictParent.innerHTML = prediction;
+      };
 
-          const ResetBG = () => {
-            console.log("Reset BG called");
-            simpleBoard.resetBackground();
-          };
-    </script>
-    
+    };
+
+    const ResetBG = () => {
+      console.log("Reset BG called");
+      simpleBoard.resetBackground();
+    };
+  </script>
+
 </body>
+
 </html>
